@@ -1,7 +1,9 @@
 <template>
   <div class="hero">
-    <h1>{{props.isBreakingBad ? 'Breaking Bad' : 'Rick and Morty'}}</h1>
-    <p @click="emitSelectedShow">{{props.isBreakingBad ? 'Rick and Morty' : 'Breaking Bad'}}</p>
+    <h1>{{ props.isBreakingBad ? "Breaking Bad" : "Rick and Morty" }}</h1>
+    <p @click="emitSelectedShow">
+      {{ props.isBreakingBad ? "Rick and Morty" : "Breaking Bad" }}
+    </p>
   </div>
 </template>
 
@@ -10,8 +12,8 @@ const props = defineProps(["isBreakingBad"]);
 const emit = defineEmits(["selectShow"]);
 
 const emitSelectedShow = () => {
-  emit("selectShow")
-}
+  emit("selectShow");
+};
 </script>
 
 <style scoped lang="scss">

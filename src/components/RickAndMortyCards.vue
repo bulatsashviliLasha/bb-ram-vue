@@ -1,5 +1,5 @@
 <script setup>
-import {ref, watch, onBeforeMount} from "vue";
+import { ref, watch, onBeforeMount } from "vue";
 import axios from "axios";
 import { NSpin } from "naive-ui";
 import CardComponent from "@/components/CardComponent.vue";
@@ -8,34 +8,36 @@ const characters = ref(null);
 const page = ref(1);
 
 watch(page, async () => {
-  const res = await axios.get(`https://rickandmortyapi.com/api/character/?page=${page.value}`);
+  const res = await axios.get(
+    `https://rickandmortyapi.com/api/character/?page=${page.value}`
+  );
   characters.value = res.data.results;
 });
 
 onBeforeMount(async () => {
   const response = await axios.get("https://rickandmortyapi.com/api/character");
   characters.value = response.data.results;
-})
+});
 </script>
 
 <template>
   <div class="container">
     <div v-if="characters" class="cards">
       <CardComponent
-          v-for="character in characters"
-          :key="character.char_id"
-          :image="character.image"
-          :name="character.name"
+        v-for="character in characters"
+        :key="character.char_id"
+        :image="character.image"
+        :name="character.name"
       >
-        <p>{{character?.location?.name}}</p>
+        <p>{{ character?.location?.name }}</p>
       </CardComponent>
     </div>
     <div v-else class="cards spinner">
       <NSpin size="large" />
     </div>
     <div class="button-container">
-      <button @click="page--"> &lt; </button>
-      <button @click="page++"> > </button>
+      <button @click="page--">&lt;</button>
+      <button @click="page++">></button>
     </div>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <script setup>
 import BreakingBadCards from "@/components/BreakingBadCards.vue";
-import {NSpin} from "naive-ui";
+import { NSpin } from "naive-ui";
 </script>
 <template>
   <Suspense>
@@ -16,8 +16,8 @@ import {NSpin} from "naive-ui";
 </template>
 
 <style scoped>
-.cards{
-  background-color: rgb(27,26,25);
+.cards {
+  background-color: rgb(27, 26, 25);
   display: flex;
   justify-content: center;
   align-items: center;
