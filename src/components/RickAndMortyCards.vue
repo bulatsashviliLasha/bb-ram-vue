@@ -1,37 +1,37 @@
 <script setup>
-import { ref, watch } from "vue";
+import {ref, watch, onBeforeMount} from "vue";
 import axios from "axios";
+import { NSpin } from "naive-ui";
 import CardComponent from "@/components/CardComponent.vue";
 
-const api = "https://www.breakingbadapi.com/api/characters?limit=8";
-
 const characters = ref(null);
-const page = ref(0);
-
-const response = await axios.get(api);
-characters.value = response.data;
+const page = ref(1);
 
 watch(page, async () => {
-  const res = await axios.get(`${api}&offset=${page.value * 8}`);
-  characters.value = res.data;
+  const res = await axios.get(`https://rickandmortyapi.com/api/character/?page=${page.value}`);
+  characters.value = res.data.results;
 });
+
+onBeforeMount(async () => {
+  const response = await axios.get("https://rickandmortyapi.com/api/character");
+  characters.value = response.data.results;
+})
 </script>
 
 <template>
   <div class="container">
-    <div class="cards">
+    <div v-if="characters" class="cards">
       <CardComponent
-        v-for="character in characters"
-        :key="character.char_id"
-        :image="character.img"
-        :name="character.name"
+          v-for="character in characters"
+          :key="character.char_id"
+          :image="character.image"
+          :name="character.name"
       >
-        <div class="jobs">
-          <p v-for="(job, index) in character.occupation" :key="job + index">
-            {{ job }}<span v-if="index < character.occupation.length - 1">, </span>
-          </p>
-        </div>
+        <p>{{character?.location?.name}}</p>
       </CardComponent>
+    </div>
+    <div v-else class="cards spinner">
+      <NSpin size="large" />
     </div>
     <div class="button-container">
       <button @click="page--"> &lt; </button>
@@ -80,14 +80,5 @@ watch(page, async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-p {
-  font-size: 10px;
-}
-
-.jobs {
-  display: flex;
-  flex-wrap: wrap;
 }
 </style>

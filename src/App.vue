@@ -1,19 +1,20 @@
 <script setup>
-import BreakingBadCards from "@/components/BreakingBadCards.vue"
+import BreakingBadCardsSuspence from "@/components/BreakingBadCardsSuspence.vue"
+import RickAndMortyCards from "@/components/RickAndMortyCards.vue"
+import HeroComponent from "@/components/HeroComponent.vue"
+import {ref} from "vue";
+
+const isBreakingBad = ref(true)
 </script>
 
 <template>
   <main>
-    <Suspense>
-      <template #default>
-        <BreakingBadCards/>
-      </template>
-      <template #fallback>
-        <div>
-          <div>Loading...</div>
-        </div>
-      </template>
-    </Suspense>
+    <HeroComponent
+        :isBreakingBad="isBreakingBad"
+        @selectShow="isBreakingBad = !isBreakingBad"
+    />
+    <BreakingBadCardsSuspence v-if="isBreakingBad"/>
+    <RickAndMortyCards v-else/>
   </main>
 </template>
 
