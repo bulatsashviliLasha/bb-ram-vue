@@ -3,6 +3,7 @@ import { ref, watch, onBeforeMount } from "vue";
 import axios from "axios";
 import { NSpin } from "naive-ui";
 import CardComponent from "@/components/CardComponent.vue";
+import scrollTop from "@/utils/scroll-top";
 
 const characters = ref(null);
 const page = ref(1);
@@ -14,6 +15,14 @@ watch(page, async () => {
   characters.value = res.data.results;
 });
 
+const scrollUpAndDecreasePage = () => {
+  page.value--;
+  scrollTop();
+}
+const scrollUpAndIncreasePage = () => {
+  page.value++;
+  scrollTop();
+}
 onBeforeMount(async () => {
   const response = await axios.get("https://rickandmortyapi.com/api/character");
   characters.value = response.data.results;
@@ -36,51 +45,8 @@ onBeforeMount(async () => {
       <NSpin size="large" />
     </div>
     <div class="button-container">
-      <button @click="page--">&lt;</button>
-      <button @click="page++">></button>
+      <button :class="{'btn-disabled': page === 1}" :disabled="page === 1" @click="scrollUpAndDecreasePage">&lt;</button>
+      <button :class="{'btn-disabled': page === 42}" :disabled="page === 42" @click="scrollUpAndIncreasePage">></button>
     </div>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.container {
-  background-color: rgb(27, 26, 26);
-  padding: 30px;
-}
-.cards {
-  max-width: 1000px;
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  h3 {
-    font-weight: bold;
-  }
-  p {
-    font-size: 10px;
-  }
-}
-
-.jobs {
-  display: flex;
-  flex-wrap: wrap;
-}
-.button-container {
-  display: flex;
-  justify-content: center;
-  padding-top: 30px;
-  button {
-    border: none;
-    width: 50px;
-    height: 50px;
-    border-radius: 100%;
-    margin: 0 5px;
-    cursor: pointer;
-  }
-}
-.spinner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-</style>

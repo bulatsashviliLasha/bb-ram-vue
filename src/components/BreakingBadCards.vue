@@ -2,6 +2,7 @@
 import { ref, watch } from "vue";
 import axios from "axios";
 import CardComponent from "@/components/CardComponent.vue";
+import scrollTop from "@/utils/scroll-top";
 
 const api = "https://www.breakingbadapi.com/api/characters?limit=8";
 
@@ -19,7 +20,7 @@ watch(page, async () => {
 
 <template>
   <div class="container">
-    <div class="cards">
+    <div v-if="characters" class="cards">
       <CardComponent
         v-for="character in characters"
         :key="character.char_id"
@@ -28,66 +29,34 @@ watch(page, async () => {
       >
         <div class="jobs">
           <p v-for="(job, index) in character.occupation" :key="job + index">
-            {{ job }}<span v-if="index < character.occupation.length - 1">, </span>
+            {{ job
+            }}<span v-if="index < character.occupation.length - 1">, </span>
           </p>
         </div>
       </CardComponent>
     </div>
+    <div else>No more characters {{ page }}</div>
     <div class="button-container">
-      <button @click="page--"> &lt; </button>
-      <button @click="page++"> > </button>
+      <button
+        :class="{ 'btn-disabled': page === 0 }"
+        :disabled="page === 0"
+        @click="
+          page--;
+          scrollTop();
+        "
+      >
+        &lt;
+      </button>
+      <button
+        :class="{ 'btn-disabled': page === 7 }"
+        :disabled="page === 7"
+        @click="
+          page++;
+          scrollTop();
+        "
+      >
+        >
+      </button>
     </div>
   </div>
 </template>
-
-<style lang="scss" scoped>
-.container {
-  background-color: rgb(27, 26, 26);
-  padding: 30px;
-}
-.cards {
-  max-width: 1000px;
-  margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  h3 {
-    font-weight: bold;
-  }
-  p {
-    font-size: 10px;
-  }
-}
-
-.jobs {
-  display: flex;
-  flex-wrap: wrap;
-}
-.button-container {
-  display: flex;
-  justify-content: center;
-  padding-top: 30px;
-  button {
-    border: none;
-    width: 50px;
-    height: 50px;
-    border-radius: 100%;
-    margin: 0 5px;
-    cursor: pointer;
-  }
-}
-.spinner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-p {
-  font-size: 10px;
-}
-
-.jobs {
-  display: flex;
-  flex-wrap: wrap;
-}
-</style>
